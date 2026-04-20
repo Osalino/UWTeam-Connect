@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Calendar, Users, Bell } from "lucide-react";
+import { Calendar, Users, Bell, Music } from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface Announcement {
@@ -48,14 +48,14 @@ export default function Index() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <button
-            onClick={() => navigate("/dashboard")}
+            onClick={() => navigate("/library")}
             className="bg-white p-6 rounded-lg shadow hover:shadow-lg transition text-left"
           >
             <div className="p-3 bg-blue-100 rounded-lg inline-block mb-4">
-              <Bell className="h-6 w-6 text-blue-600" />
+              <Music className="h-6 w-6 text-blue-600" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-900">Dashboard</h3>
-            <p className="text-sm text-gray-600 mt-1">View team stats</p>
+            <h3 className="text-lg font-semibold text-gray-900">Song Library</h3>
+            <p className="text-sm text-gray-600 mt-1">Browse songs</p>
           </button>
 
           <button

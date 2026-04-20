@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   Home,
-  BarChart3,
   MessageCircle,
   ChevronDown,
   Megaphone,
@@ -29,11 +28,6 @@ const navItems: NavItem[] = [
     label: "Home",
     href: "/",
     icon: Home,
-  },
-  {
-    label: "Dashboard",
-    href: "/dashboard",
-    icon: BarChart3,
   },
   {
     label: "Announcements",

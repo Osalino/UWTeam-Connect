@@ -11,7 +11,6 @@ import {
 } from "react-router-dom";
 import { Layout } from "./components/Layout";
 import Index from "./pages/Index";
-import Dashboard from "./pages/Dashboard";
 import Schedule from "./pages/Schedule";
 import TeamMemeber from "./pages/Team Memeber";
 import Reporting from "./pages/Reporting";
@@ -40,14 +39,6 @@ const AppRoutes = () => (
       element={
         <ProtectedRoute>
           <Index />
-        </ProtectedRoute>
-      }
-    />
-    <Route
-      path="/dashboard"
-      element={
-        <ProtectedRoute>
-          <Dashboard />
         </ProtectedRoute>
       }
     />
