@@ -1,50 +1,82 @@
+// Import React hooks and routing
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Crown, User } from "lucide-react";
+import { Crown, User } from "lucide-react"; // Icons from lucide library
 
 export default function Login() {
-  const [isLogin, setIsLogin] = useState(true);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [role, setRole] = useState<"leader" | "member">("member");
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
+  // Component state management
+  const [isLogin, setIsLogin] = useState(true);  // Toggle between login/signup mode
+  const [username, setUsername] = useState("");  // Username input field
+  const [password, setPassword] = useState("");  // Password input field
+  const [role, setRole] = useState<"leader" | "member">("member");  // Selected role
+  const [error, setError] = useState("");        // Error message to display
+  const navigate = useNavigate();                // React Router navigation hook
 
+  /**
+   * Handle login/signup form submission
+   * Validates input, sends request to backend, stores token, and redirects
+   */
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setError("");
+    e.preventDefault();  // Prevent default form submission (page reload)
+    setError("");        // Clear any previous error messages
 
+    // Client-side validation before sending to server
     if (!username.trim() || !password.trim()) {
       setError("Please fill in all fields");
       return;
     }
 
+    // Check username length (must be 3+ characters for backend validation)
+    if (username.trim().length < 3) {
+      setError("Username must be at least 3 characters");
+      return;
+    }
+
+    // Check password length (must be 6+ characters for backend validation)
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters");
+      return;
+    }
+
     try {
+      // Determine which API endpoint to call based on login/signup mode
       const endpoint = isLogin ? "/api/auth/login" : "/api/auth/signup";
+
+      // Send POST request to backend API
       const response = await fetch(endpoint, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json",  // Tell server we're sending JSON
         },
         body: JSON.stringify({
           username,
           password,
-          role,
+          role,  // Only used for signup, ignored during login
         }),
       });
 
-      const data = await response.json();
+      // Parse the JSON response from the server
+      let data: { message?: string; user?: { id: number; username: string; role: string }; token?: string };
+      try {
+        data = await response.json();
+      } catch {
+        throw new Error("Server is not responding. Please try again later.");
+      }
 
+      // If server returned an error status, throw an error
       if (!response.ok) {
         throw new Error(data.message || "Authentication failed");
       }
 
-      // Store user data
+      // SUCCESS! Store user data and JWT token in browser's localStorage
+      // This persists even after browser refresh
       localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("token", data.token);
 
-      // Navigate to dashboard
+      // Redirect user to the home page
       navigate("/");
     } catch (err) {
+      // Display error message to the user
       setError(err instanceof Error ? err.message : "Something went wrong");
     }
   }

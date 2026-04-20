@@ -43,12 +43,12 @@ const navItems: NavItem[] = [
   { divider: true },
   {
     label: "Team Members",
-    href: "/TeamMembers",
+    href: "/teammembers",
     icon: MessageCircle,
   },
   {
     label: "Schedule",
-    href: "/Schedule",
+    href: "/schedule",
     icon: Calendar,
   },
   {
@@ -65,6 +65,7 @@ export function Sidebar() {
 
   const handleLogout = () => {
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
     navigate("/login");
   };
 

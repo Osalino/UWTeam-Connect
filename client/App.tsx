@@ -23,7 +23,13 @@ const queryClient = new QueryClient();
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const user = localStorage.getItem("user");
-  return user ? <>{children}</> : <Navigate to="/login" replace />;
+  const token = localStorage.getItem("token");
+
+  if (!user || !token) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return <>{children}</>;
 };
 
 const AppRoutes = () => (

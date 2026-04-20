@@ -19,7 +19,23 @@ export default function TeamMemeber() {
 
   async function fetchMembers() {
     try {
-      const response = await fetch("/api/team-members");
+      const token = localStorage.getItem("token");
+      if (!token) {
+        console.error("No token found");
+        return;
+      }
+
+      const response = await fetch("/api/team-members", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        console.error("Failed to fetch members:", response.status, response.statusText);
+        return;
+      }
+
       const data = await response.json();
       setMembers(data);
     } catch (error) {

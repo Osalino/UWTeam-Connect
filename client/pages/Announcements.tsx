@@ -19,7 +19,23 @@ export default function Announcements() {
 
   async function fetchAnnouncements() {
     try {
-      const response = await fetch("/api/announcements");
+      const token = localStorage.getItem("token");
+      if (!token) {
+        console.error("No token found");
+        return;
+      }
+
+      const response = await fetch("/api/announcements", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        console.error("Failed to fetch announcements:", response.status, response.statusText);
+        return;
+      }
+
       const data = await response.json();
       setAnnouncements(data);
     } catch (error) {
@@ -27,26 +43,21 @@ export default function Announcements() {
     }
   }
 
-
-
   async function addAnnouncement() {
     if (!title.trim() || !description.trim()) return;
 
-    // Get logged in user
-    const userStr = localStorage.getItem("user");
-    const user = userStr ? JSON.parse(userStr) : null;
-
     try {
+      const token = localStorage.getItem("token");
       const response = await fetch("/api/announcements", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           title: title,
           description: description,
           category: newAnnouncementCategory,
-          author: user?.username || "Anonymous",
         }),
       });
 
