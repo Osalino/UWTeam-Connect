@@ -7,7 +7,7 @@ export default function SettingsPage() {
         <Music className="h-10 w-10 text-gray-400" />
       </div>
       <h1 className="text-3xl font-bold text-gray-900 mb-2">Song Library</h1>
-      <p className="text-gray-500 text-lg">Coming Soon</p>
+      <p className="text-gray-500 text-lg">We are currently working on this feature.</p>
     </div>
   );
 }
