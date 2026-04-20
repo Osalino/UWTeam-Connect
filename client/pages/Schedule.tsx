@@ -635,7 +635,7 @@ export default function Schedule() {
         .filter((e) => e.date >= new Date(year, month, 1))
         .sort((a, b) => a.date.getTime() - b.date.getTime());
 
-  // Builds the text label shown in the calendar toolbar (e.g. "March 2025" or "Mar 2 – Mar 8, 2025")
+  // Builds the text label shown in the calendar toolbar
   const headerLabel = () => {
     if (viewMode === "month") return `${MONTHS[month]} ${year}`;
     if (viewMode === "week") {

@@ -11,6 +11,7 @@
 //
 //
 
+import "dotenv/config";
 import { createServer } from "./server";
 
 const PORT = 3000;

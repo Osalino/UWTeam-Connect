@@ -1,4 +1,4 @@
-import { Plus } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface Announcement {
@@ -71,6 +71,24 @@ export default function Announcements() {
       await fetchAnnouncements();
     } catch (error) {
       console.error("Error adding announcement:", error);
+    }
+  }
+
+  async function deleteAnnouncement(id: number) {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`/api/announcements/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!response.ok) {
+        const body = await response.text();
+        console.error("Delete failed:", response.status, body);
+        throw new Error("Failed to delete announcement");
+      }
+      setAnnouncements((prev) => prev.filter((a) => a.id !== id));
+    } catch (error) {
+      console.error("Error deleting announcement:", error);
     }
   }
 
@@ -169,9 +187,18 @@ export default function Announcements() {
             <div className="flex justify-between items-center">
               <h2 className="font-semibold text-lg">{announcement.title}</h2>
 
-              <span className="text-xs px-2 py-1 bg-gray-200 rounded">
-                {announcement.category}
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="text-xs px-2 py-1 bg-gray-200 rounded">
+                  {announcement.category}
+                </span>
+                <button
+                  onClick={() => deleteAnnouncement(announcement.id)}
+                  className="p-1 text-gray-400 hover:text-red-500 transition-colors"
+                  title="Delete announcement"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
             </div>
 
             <p className="text-xs text-gray-500 mt-1">
