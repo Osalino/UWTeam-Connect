@@ -2,6 +2,7 @@
 import express from "express"; // Web framework for building REST APIs
 import cors from "cors"; // Enable Cross-Origin Resource Sharing for frontend-backend communication
 import bcrypt from "bcrypt"; // Library for hashing passwords securely
+import swaggerUi from "swagger-ui-express"; // Serves the interactive API documentation UI
 import { prisma } from "./data/db"; // Prisma ORM client for database operations
 import { authenticateToken, generateToken, AuthRequest } from "./middleware/auth"; // JWT authentication middleware
 import {
@@ -11,12 +12,17 @@ import {
   announcementSchema, // Zod schema for validating announcement data
   eventSchema, // Zod schema for validating event data
 } from "./utils/validation";
+import { swaggerSpec } from "./swagger"; // OpenAPI specification
 
 export function createServer() {
   const app = express();
 
   // Enable CORS so the frontend can communicate with the backend
   app.use(cors());
+
+  // Serve interactive API documentation at /api-docs
+  // Visit http://localhost:3000/api-docs to explore all endpoints
+  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
   // Parse JSON request bodies automatically
   app.use(express.json());
@@ -217,6 +223,9 @@ export function createServer() {
    * Response: The created announcement
    */
   app.post("/api/announcements", authenticateToken, async (req: AuthRequest, res) => {
+    if (req.user?.role !== "leader") {
+      return res.status(403).json({ message: "Only team leaders can post announcements" });
+    }
     try {
       // Step 1: Validate the announcement data
       const validatedData = announcementSchema.parse(req.body);
@@ -273,7 +282,12 @@ export function createServer() {
    * Request body: { title, description, category }
    * Response: The updated announcement
    */
+
+  // Check if user is authenticated and has leader role, else it returns a 403 Forbidden response
   app.put("/api/announcements/:id", authenticateToken, async (req: AuthRequest, res) => {
+    if (req.user?.role !== "leader") {
+      return res.status(403).json({ message: "Only team leaders can edit announcements" });
+    }
     try {
       const id = parseInt(req.params.id);
       if (isNaN(id)) return res.status(400).json({ message: "Invalid ID" });
@@ -320,7 +334,10 @@ export function createServer() {
    * Headers required: Authorization: Bearer <token>
    * Response: 204 No Content
    */
-  app.delete("/api/announcements/:id", authenticateToken, async (req, res) => {
+  app.delete("/api/announcements/:id", authenticateToken, async (req: AuthRequest, res) => {
+    if (req.user?.role !== "leader") {
+      return res.status(403).json({ message: "Only team leaders can delete announcements" });
+    }
     try {
       const id = parseInt(req.params.id);
       if (isNaN(id)) return res.status(400).json({ message: "Invalid ID" });
@@ -365,6 +382,9 @@ export function createServer() {
    * Response: The created event
    */
   app.post("/api/events", authenticateToken, async (req: AuthRequest, res) => {
+    if (req.user?.role !== "leader") {
+      return res.status(403).json({ message: "Only team leaders can add events" });
+    }
     try {
       const validatedData = eventSchema.parse(req.body);
 
@@ -398,7 +418,10 @@ export function createServer() {
    * Request body: { name, date, time, description, location, eventType }
    * Response: The updated event
    */
-  app.put("/api/events/:id", authenticateToken, async (req, res) => {
+  app.put("/api/events/:id", authenticateToken, async (req: AuthRequest, res) => {
+    if (req.user?.role !== "leader") {
+      return res.status(403).json({ message: "Only team leaders can edit events" });
+    }
     try {
       const id = parseInt(req.params.id);
       if (isNaN(id)) return res.status(400).json({ message: "Invalid ID" });
@@ -434,7 +457,10 @@ export function createServer() {
    * Headers required: Authorization: Bearer <token>
    * Response: 204 No Content
    */
-  app.delete("/api/events/:id", authenticateToken, async (req, res) => {
+  app.delete("/api/events/:id", authenticateToken, async (req: AuthRequest, res) => {
+    if (req.user?.role !== "leader") {
+      return res.status(403).json({ message: "Only team leaders can delete events" });
+    }
     try {
       const id = parseInt(req.params.id);
       if (isNaN(id)) return res.status(400).json({ message: "Invalid ID" });

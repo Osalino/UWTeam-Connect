@@ -315,9 +315,10 @@ interface EventDetailModalProps {
   event: Event;
   onClose: () => void;
   onDelete: (id: number) => void;
+  isLeader: boolean;
 }
 
-function EventDetailModal({ event, onClose, onDelete }: EventDetailModalProps) {
+function EventDetailModal({ event, onClose, onDelete, isLeader }: EventDetailModalProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-4 p-6">
@@ -359,14 +360,16 @@ function EventDetailModal({ event, onClose, onDelete }: EventDetailModalProps) {
           </p>
         )}
 
-        {/* Delete button — removes the event and closes the modal */}
-        <button
-          onClick={() => { onDelete(event.id); onClose(); }}
-          className="w-full flex items-center justify-center gap-2 px-4 py-2 border border-red-200 text-red-600 rounded-lg text-sm font-medium hover:bg-red-50 transition"
-        >
-          <Trash2 size={15} />
-          Delete Event
-        </button>
+        {/* Delete button — only visible to leaders */}
+        {isLeader && (
+          <button
+            onClick={() => { onDelete(event.id); onClose(); }}
+            className="w-full flex items-center justify-center gap-2 px-4 py-2 border border-red-200 text-red-600 rounded-lg text-sm font-medium hover:bg-red-50 transition"
+          >
+            <Trash2 size={15} />
+            Delete Event
+          </button>
+        )}
       </div>
     </div>
   );
@@ -536,6 +539,8 @@ function DayView({
 // ─── Main Schedule Component ──────────────────────────────────────────────────
 export default function Schedule() {
   const today = new Date();
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const isLeader = user.role === "leader";
 
   // currentDate drives which month/week/day is being displayed on the calendar
   const [currentDate, setCurrentDate] = useState(new Date(2025, 2, 1));
@@ -660,6 +665,7 @@ export default function Schedule() {
           event={detailEvent}
           onClose={() => setDetailEvent(null)}
           onDelete={deleteEvent}
+          isLeader={isLeader}
         />
       )}
 
@@ -678,14 +684,16 @@ export default function Schedule() {
             <Download size={16} />
             Export
           </button>
-          {/* Opens the Add Event modal, pre-filling the selected day if one is active */}
-          <button
-            onClick={() => openAddModal(selectedDay ?? undefined)}
-            className="flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition"
-          >
-            <Plus size={16} />
-            Add Event
-          </button>
+          {/* Add Event button — only visible to leaders */}
+          {isLeader && (
+            <button
+              onClick={() => openAddModal(selectedDay ?? undefined)}
+              className="flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition"
+            >
+              <Plus size={16} />
+              Add Event
+            </button>
+          )}
         </div>
       </div>
 
@@ -839,12 +847,14 @@ export default function Schedule() {
           {/* Show quick-add and clear buttons when a day is selected */}
           {selectedDay && (
             <div className="flex gap-2">
-              <button
-                onClick={() => openAddModal(selectedDay)}
-                className="text-xs font-medium px-3 py-1.5 bg-black text-white rounded-lg hover:bg-gray-800 transition flex items-center gap-1"
-              >
-                <Plus size={12} /> Add to this day
-              </button>
+              {isLeader && (
+                <button
+                  onClick={() => openAddModal(selectedDay)}
+                  className="text-xs font-medium px-3 py-1.5 bg-black text-white rounded-lg hover:bg-gray-800 transition flex items-center gap-1"
+                >
+                  <Plus size={12} /> Add to this day
+                </button>
+              )}
               <button
                 onClick={() => setSelectedDay(null)}
                 className="text-xs font-medium px-3 py-1.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
@@ -859,12 +869,14 @@ export default function Schedule() {
         {filteredEvents.length === 0 ? (
           <div className="text-center py-12 text-gray-400">
             <p className="text-sm">No events {selectedDay ? "on this day" : "this month"}.</p>
-            <button
-              onClick={() => openAddModal(selectedDay ?? undefined)}
-              className="mt-3 text-sm font-medium text-gray-700 underline hover:text-gray-900"
-            >
-              Add one
-            </button>
+            {isLeader && (
+              <button
+                onClick={() => openAddModal(selectedDay ?? undefined)}
+                className="mt-3 text-sm font-medium text-gray-700 underline hover:text-gray-900"
+              >
+                Add one
+              </button>
+            )}
           </div>
         ) : (
           // Responsive card grid — 1 col on mobile, 2 on sm, 3 on lg

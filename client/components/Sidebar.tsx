@@ -8,6 +8,7 @@ import {
   Calendar,
   Music,
   LogOut,
+  BookOpen,
 } from "lucide-react";
 
 interface NavItem {
@@ -49,6 +50,11 @@ const navItems: NavItem[] = [
     label: "Song Library",
     href: "/library",
     icon: Music,
+  },
+  {
+    label: "Scripture Wall",
+    href: "/scripture-wall",
+    icon: BookOpen,
   },
 ];
 

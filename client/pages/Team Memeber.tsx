@@ -1,3 +1,4 @@
+// Team Members page - lists all registered users with search, filter, and stats
 import { useState, useEffect } from "react";
 import { Search, Plus, Users, UserCheck, Crown, TrendingUp, MoreVertical } from "lucide-react";
 
@@ -17,6 +18,7 @@ export default function TeamMemeber() {
     fetchMembers();
   }, []);
 
+  // Fetch team members from the API using the stored JWT token
   async function fetchMembers() {
     try {
       const token = localStorage.getItem("token");
@@ -55,6 +57,7 @@ export default function TeamMemeber() {
 
   const filters = ["All Members", "Vocals", "Instruments", "Tech Team"];
 
+  // Convert role value to a readable label
   const getRoleDisplay = (role: "leader" | "member") => {
     return role === "leader" ? "Team Leader" : "Team Member";
   };
@@ -63,6 +66,7 @@ export default function TeamMemeber() {
     return role === "leader" ? "bg-black text-white" : "bg-blue-100 text-blue-800";
   };
 
+  // Filter members by the search query (case-insensitive)
   const filteredMembers = members.filter((member) =>
     member.username.toLowerCase().includes(searchQuery.toLowerCase())
   );

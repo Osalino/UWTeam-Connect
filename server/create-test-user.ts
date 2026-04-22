@@ -17,14 +17,14 @@ async function createTestUser() {
       },
     });
 
-    console.log("✅ Test user created successfully!");
+    console.log("Test user created successfully!");
     console.log("Username: testuser");
     console.log("Password: test1234");
     console.log("Role: leader");
     console.log("\nUser ID:", user.id);
 
   } catch (error) {
-    console.error("❌ Error creating test user:", error);
+    console.error("Error creating test user:", error);
   } finally {
     await prisma.$disconnect();
   }

@@ -1,3 +1,4 @@
+// Home/dashboard page - shows quick-nav cards and recent announcements
 import { useNavigate } from "react-router-dom";
 import { Calendar, Users, Bell, Music } from "lucide-react";
 import { useEffect, useState } from "react";

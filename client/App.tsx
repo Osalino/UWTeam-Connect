@@ -17,6 +17,7 @@ import Reporting from "./pages/Reporting";
 import SettingsPage from "./pages/library";
 import Announcements from "./pages/Announcements";
 import Login from "./pages/Login";
+import ScriptureWall from "./pages/ScriptureWall";
 
 const queryClient = new QueryClient();
 
@@ -79,6 +80,14 @@ const AppRoutes = () => (
       element={
         <ProtectedRoute>
           <SettingsPage />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/scripture-wall"
+      element={
+        <ProtectedRoute>
+          <ScriptureWall />
         </ProtectedRoute>
       }
     />

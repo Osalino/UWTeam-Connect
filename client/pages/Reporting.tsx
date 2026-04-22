@@ -1,3 +1,4 @@
+// Reporting page - placeholder for future analytics and reports
 export default function Reporting() {
   return (
     <div className="p-8">

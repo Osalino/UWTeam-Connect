@@ -1,3 +1,4 @@
+// Demo route handler - returns a simple test message from the server
 import { RequestHandler } from "express";
 import { DemoResponse } from "@shared/api";
 

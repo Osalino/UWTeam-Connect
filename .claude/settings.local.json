@@ -13,7 +13,10 @@
       "Bash(findstr \":3000\")",
       "Bash(rm -rf \"/c/Users/Osaze/Documents/Programming/Web Dev/UWteamV2/testing\")",
       "Bash(rm -f \"/c/Users/Osaze/Documents/Programming/Web Dev/UWteamV2/vitest.config.ts\")",
-      "Bash(npx vitest:*)"
+      "Bash(npx vitest:*)",
+      "Bash(npx pnpm:*)",
+      "Bash(npx tsc:*)",
+      "mcp__webstorm__get_all_open_file_paths"
     ]
   }
 }

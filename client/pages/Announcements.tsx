@@ -1,3 +1,4 @@
+// Announcements page - view, filter, add, and delete team announcements
 import { Plus, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -11,12 +12,16 @@ interface Announcement {
 }
 
 export default function Announcements() {
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const isLeader = user.role === "leader";
+
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [newAnnouncementCategory, setNewAnnouncementCategory] = useState<string>("General");
 
+  // Fetch all announcements from the API on mount
   async function fetchAnnouncements() {
     try {
       const token = localStorage.getItem("token");
@@ -43,6 +48,7 @@ export default function Announcements() {
     }
   }
 
+  // Send a new announcement to the API and refresh the list
   async function addAnnouncement() {
     if (!title.trim() || !description.trim()) return;
 
@@ -74,6 +80,7 @@ export default function Announcements() {
     }
   }
 
+  // Delete an announcement by ID and remove it from local state
   async function deleteAnnouncement(id: number) {
     try {
       const token = localStorage.getItem("token");
@@ -136,44 +143,46 @@ export default function Announcements() {
       </div>
 
       <section className="flex flex-col gap-4 p-4">
-        <div className="border rounded-lg p-6 bg-gray-50">
-          <h2 className="text-xl font-semibold mb-4">Add New Announcement</h2>
-          <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-            <input
-              type="text"
-              placeholder="Title..."
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
-            />
-            <input
-              type="text"
-              placeholder="Description..."
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
-            />
-            <div className="flex gap-2">
-              <select
-                value={newAnnouncementCategory}
-                onChange={(e) => setNewAnnouncementCategory(e.target.value)}
-                className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 flex-1"
-              >
-                <option value="General">General</option>
-                <option value="Important">Important</option>
-                <option value="Reminder">Reminder</option>
-                <option value="Urgent">Urgent</option>
-              </select>
-              <button
-                type="submit"
-                className="bg-blue-500 text-white px-6 py-2 rounded-lg inline-flex items-center gap-2 hover:bg-blue-600"
-              >
-                <Plus className="h-4 w-4" />
-                Add Announcement
-              </button>
-            </div>
-          </form>
-        </div>
+        {isLeader && (
+          <div className="border rounded-lg p-6 bg-gray-50">
+            <h2 className="text-xl font-semibold mb-4">Add New Announcement</h2>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+              <input
+                type="text"
+                placeholder="Title..."
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+              />
+              <input
+                type="text"
+                placeholder="Description..."
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+              />
+              <div className="flex gap-2">
+                <select
+                  value={newAnnouncementCategory}
+                  onChange={(e) => setNewAnnouncementCategory(e.target.value)}
+                  className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 flex-1"
+                >
+                  <option value="General">General</option>
+                  <option value="Important">Important</option>
+                  <option value="Reminder">Reminder</option>
+                  <option value="Urgent">Urgent</option>
+                </select>
+                <button
+                  type="submit"
+                  className="bg-blue-500 text-white px-6 py-2 rounded-lg inline-flex items-center gap-2 hover:bg-blue-600"
+                >
+                  <Plus className="h-4 w-4" />
+                  Add Announcement
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
 
         <div className="border-t-2 border-gray-300 my-4"></div>
 
@@ -191,13 +200,15 @@ export default function Announcements() {
                 <span className="text-xs px-2 py-1 bg-gray-200 rounded">
                   {announcement.category}
                 </span>
-                <button
-                  onClick={() => deleteAnnouncement(announcement.id)}
-                  className="p-1 text-gray-400 hover:text-red-500 transition-colors"
-                  title="Delete announcement"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </button>
+                {isLeader && (
+                  <button
+                    onClick={() => deleteAnnouncement(announcement.id)}
+                    className="p-1 text-gray-400 hover:text-red-500 transition-colors"
+                    title="Delete announcement"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                )}
               </div>
             </div>
 
