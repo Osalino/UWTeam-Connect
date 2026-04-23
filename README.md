@@ -1,52 +1,107 @@
 # UWTeam Connect
 
-A worship team management system for handling announcements, events, and team members.
+A worship team management system for managing announcements, events, and team members.
 
-## Requirements
+---
 
-- [Node.js](https://nodejs.org/) (v18+)
-- [pnpm](https://pnpm.io/) — install with `npm install -g pnpm`
-- A PostgreSQL database (e.g. [Neon](https://neon.tech) for a free hosted option)
+## 📦 Requirements
 
-## Setup
+Make sure you have the following installed:
 
-1. **Clone the repo**
+* [Node.js](https://nodejs.org/) (v18 or higher)
+* [pnpm](https://pnpm.io/) (install with `npm install -g pnpm`)
+* A PostgreSQL database (e.g. [Neon](https://neon.tech))
 
-   ```bash
-   git clone <repo-url>
-   cd UWteamV2
-   ```
+---
 
-2. **Install dependencies**
+## 🚀 Setup Instructions
 
-   ```bash
-   pnpm install
-   ```
+### 1. Clone the repository
 
-3. **Start the development server**
+```bash
+git clone <repo-url>
+cd UWTeam-Connect
+```
 
-   ```bash
-   pnpm dev
-   ```
+---
 
-   Open `http://localhost:8080` in your browser.
+### 2. Install pnpm (if not installed)
 
-## Environment Variables
+```bash
+npm install -g pnpm
+```
 
-See `.env.example` for all required variables.
+---
 
-| Variable | Description |
-|----------|-------------|
-| `DATABASE_URL` | PostgreSQL connection string |
-| `JWT_SECRET` | Secret key for signing JWT tokens |
-| `PORT` | Port for the Express server (default: 3000) |
+### 3. Install project dependencies
 
-## Scripts
+```bash
+pnpm install
+```
 
-| Command | Description |
-|---------|-------------|
-| `pnpm dev` | Run frontend + backend in development |
-| `pnpm build` | Build for production |
-| `pnpm start` | Run the production build |
-| `pnpm test` | Run tests |
-| `pnpm typecheck` | Type-check TypeScript |
+---
+
+### 4. Create environment file
+
+```bash
+cp .env.example .env
+```
+
+Then open `.env` and update:
+
+```env
+DATABASE_URL="your_database_url"
+JWT_SECRET="your_secret_key"
+PORT=3000
+```
+
+---
+
+### 5. Generate Prisma Client
+
+```bash
+pnpm prisma generate
+```
+
+---
+
+### 6. Run database migrations
+
+```bash
+pnpm prisma migrate dev
+```
+
+---
+
+### 7. Start the development server
+
+```bash
+pnpm dev
+```
+
+---
+
+## 🌐 Running the App
+
+Once started, open your browser and go to:
+
+```
+http://localhost:8080
+```
+
+(or the port shown in your terminal)
+
+---
+
+## ⚠️ Notes
+
+* Ensure your `.env` file contains a valid `DATABASE_URL`
+* The `.env` file is not included in the repository for security reasons
+* If you encounter errors, run:
+
+```bash
+pnpm install
+pnpm prisma generate
+```
+
+---
