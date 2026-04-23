@@ -1,3 +1,4 @@
+// Layout wrapper - wraps every page with the sidebar and a scrollable main area
 import { Sidebar } from "./Sidebar";
 
 export function Layout({ children }: { children: React.ReactNode }) {

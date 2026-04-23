@@ -62,6 +62,7 @@ export default function TeamMemeber() {
     return role === "leader" ? "Team Leader" : "Team Member";
   };
 
+  // Returns the Tailwind classes for a role badge (black for leader, blue for member)
   const getRoleBadgeColor = (role: "leader" | "member") => {
     return role === "leader" ? "bg-black text-white" : "bg-blue-100 text-blue-800";
   };

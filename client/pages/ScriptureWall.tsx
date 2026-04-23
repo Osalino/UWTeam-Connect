@@ -62,6 +62,7 @@ interface AddPostModalProps {
   author: string;
 }
 
+// Modal form for submitting a new scripture post
 function AddPostModal({ onClose, onAdd, author }: AddPostModalProps) {
   const [reference, setReference] = useState("");
   const [verse, setVerse] = useState("");
@@ -69,6 +70,7 @@ function AddPostModal({ onClose, onAdd, author }: AddPostModalProps) {
   const [theme, setTheme] = useState("Peace");
   const [error, setError] = useState("");
 
+  // Validates fields, formats the today's date, then calls onAdd with the new post data
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!reference.trim() || !verse.trim()) {
@@ -172,6 +174,7 @@ export default function ScriptureWall() {
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
 
+  // Flips the liked state on a post and adjusts the like count accordingly
   function toggleLike(id: number) {
     setPosts((prev) =>
       prev.map((p) =>
@@ -182,6 +185,7 @@ export default function ScriptureWall() {
     );
   }
 
+  // Creates a new post with a unique timestamp ID and prepends it to the feed
   function addPost(data: Omit<ScripturePost, "id" | "likes" | "liked">) {
     const newPost: ScripturePost = {
       ...data,
@@ -192,6 +196,7 @@ export default function ScriptureWall() {
     setPosts((prev) => [newPost, ...prev]);
   }
 
+  // Filter posts by the search query across reference, verse text, theme, and author
   const filtered = posts.filter(
     (p) =>
       p.reference.toLowerCase().includes(search.toLowerCase()) ||

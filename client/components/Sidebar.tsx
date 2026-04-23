@@ -59,16 +59,19 @@ const navItems: NavItem[] = [
 ];
 
 export function Sidebar() {
+  // Tracks which nav folders are currently open (expanded)
   const [expandedFolders, setExpandedFolders] = useState<string[]>(["Folders"]);
   const location = useLocation();
   const navigate = useNavigate();
 
+  // Clears auth data from localStorage and sends the user back to the login page
   const handleLogout = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
     navigate("/login");
   };
 
+  // Toggles a folder open or closed in the nav
   const toggleFolder = (label: string) => {
     setExpandedFolders((prev) =>
       prev.includes(label)
@@ -77,6 +80,7 @@ export function Sidebar() {
     );
   };
 
+  // Returns true if the given href matches the current URL (exact or prefix match)
   const isActive = (href?: string) => {
     if (!href) return false;
     return location.pathname === href || location.pathname.startsWith(href + "/");
@@ -86,7 +90,7 @@ export function Sidebar() {
     <div className="w-64 h-screen bg-white border-r border-gray-200 flex flex-col p-6 overflow-y-auto">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-xl font-bold text-gray-900">App</h1>
+        <h1 className="text-xl font-bold text-gray-900">UWTeam</h1>
       </div>
 
       {/* Navigation */}

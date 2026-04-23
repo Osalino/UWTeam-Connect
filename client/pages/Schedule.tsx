@@ -587,7 +587,7 @@ export default function Schedule() {
     }
   }
 
-  // Opens the Add Event modal, optionally pre-filling a date
+  // Opens the Add Event modal, optionally pre filling a date
   function openAddModal(prefill?: Date) {
     setAddPrefillDate(prefill);
     setShowAddModal(true);
@@ -609,14 +609,13 @@ export default function Schedule() {
     setSelectedDay(null);
   }
 
-  // Export is disabled — function kept but button won't call it
+  // Export is disabled
   function exportEvents() {
     const lines = [
       "Title,Date,Time,Location,Description,Attendees",
       ...events.map((e) =>
         [
-          `"${e.title}"`,
-          `"${MONTHS[e.date.getMonth()]} ${e.date.getDate()}, ${e.date.getFullYear()}"`,
+          `"${e.title}"`,`"${MONTHS[e.date.getMonth()]} ${e.date.getDate()}, ${e.date.getFullYear()}"`,
           `"${e.time}"`,
           `"${e.location}"`,
           `"${e.description}"`,

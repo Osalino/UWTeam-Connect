@@ -19,8 +19,12 @@ import Announcements from "./pages/Announcements";
 import Login from "./pages/Login";
 import ScriptureWall from "./pages/ScriptureWall";
 
+// Root app - sets up providers, routing, and auth-protected routes
+
+// Single shared React Query client used across the whole app
 const queryClient = new QueryClient();
 
+// Redirects to /login if no user or token is stored in localStorage
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const user = localStorage.getItem("user");
   const token = localStorage.getItem("token");
@@ -32,6 +36,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
+// All app routes - every path except /login is wrapped in ProtectedRoute
 const AppRoutes = () => (
   <Routes>
     <Route path="/login" element={<Login />} />
@@ -94,6 +99,7 @@ const AppRoutes = () => (
   </Routes>
 );
 
+// Renders routes without the sidebar on the login page, with it on all others
 const AppContent = () => {
   const location = useLocation();
   const isLoginPage = location.pathname === "/login";

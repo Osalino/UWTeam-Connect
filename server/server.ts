@@ -45,12 +45,12 @@ export function createServer() {
       const validatedData = signupSchema.parse(req.body);
       const { username, email, password, role } = validatedData;
 
-      //  Sanitize user inputs to prevent XSS (Cross-Site Scripting) attacks
+      //  Sanitize user inputs to prevent XSS attacks
       // This removes dangerous characters like <, >, &, etc.
       const sanitizedUsername = sanitizeString(username);
       const sanitizedEmail = email ? sanitizeString(email) : undefined;
 
-      // Step 3: Check if username already exists in the database
+      //  Checks if username already exists in the database
       const existingUser = await prisma.user.findUnique({
         where: { username: sanitizedUsername },
       });
@@ -76,7 +76,7 @@ export function createServer() {
         },
       });
 
-      //  Generate a JWT (JSON Web Token) for authentication
+      //  Generate a JWT for authentication
       // This token expires in 7 days and contains user info
       const token = generateToken({
         id: newUser.id,
@@ -227,28 +227,28 @@ export function createServer() {
       return res.status(403).json({ message: "Only team leaders can post announcements" });
     }
     try {
-      // Step 1: Validate the announcement data
+      //  Validate the announcement data
       const validatedData = announcementSchema.parse(req.body);
       const { title, description, category } = validatedData;
 
-      // Step 2: Sanitize all text inputs to prevent XSS attacks
+      // Sanitize all text inputs to prevent XSS attacks
       const sanitizedTitle = sanitizeString(title);
       const sanitizedDescription = sanitizeString(description);
       const sanitizedCategory = sanitizeString(category);
 
-      // Step 3: Create the announcement in database
+      //  Create the announcement in database
       // req.user contains the decoded JWT token data (set by authenticateToken middleware)
       const newAnnouncement = await prisma.announcement.create({
         data: {
           title: sanitizedTitle,
           description: sanitizedDescription,
           category: sanitizedCategory,
-          author: req.user?.username || "Anonymous", // Use logged-in user's name
+          author: req.user?.username || "Anonymous", // Use logged in user's name
           authorId: req.user?.id, // Link to the user who created it
         },
       });
 
-      // Step 4: Return the created announcement
+      // Return the created announcement
       res.status(201).json({
         id: newAnnouncement.id,
         title: newAnnouncement.title,
@@ -279,7 +279,7 @@ export function createServer() {
    * Update an existing announcement (Protected route)
    *
    * Headers required: Authorization: Bearer <token>
-   * Request body: { title, description, category }
+   * Request body title, description, category
    * Response: The updated announcement
    */
 

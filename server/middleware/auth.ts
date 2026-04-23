@@ -30,11 +30,11 @@ export interface AuthRequest extends Request {
  * 5. Allows the request to continue to the actual route handler
  */
 export function authenticateToken(req: AuthRequest, res: Response, next: NextFunction) {
-  // Step 1: Get the Authorization header from the request
+  // Get the Authorization header from the request
   // Format expected: "Bearer <token>"
   const authHeader = req.headers["authorization"];
 
-  // Step 2: Extract just the token part (remove "Bearer " prefix)
+  //  Extract just the token part (remove "Bearer " prefix)
   const token = authHeader && authHeader.split(" ")[1];
 
   // Step 3: If no token provided, reject with 401 Unauthorized
@@ -43,7 +43,7 @@ export function authenticateToken(req: AuthRequest, res: Response, next: NextFun
   }
 
   try {
-    // Step 4: Verify the token using the secret key
+    // Verify the token using the secret key
     // If token is invalid or expired, this will throw an error
     const decoded = jwt.verify(token, JWT_SECRET) as {
       id: number;

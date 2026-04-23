@@ -1,4 +1,4 @@
-// Song Library page - placeholder until the feature is built
+// Song Library page - is a feature that will be added in the future
 import { Music } from "lucide-react";
 
 export default function SettingsPage() {
