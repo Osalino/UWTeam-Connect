@@ -286,7 +286,7 @@ export function createServer() {
   // Check if user is authenticated and has leader role, else it returns a 403 Forbidden response
   app.put("/api/announcements/:id", authenticateToken, async (req: AuthRequest, res) => {
     if (req.user?.role !== "leader") {
-      return res.status(403).json({ message: "Only team leaders can edit announcements" });
+      return res.status(403).json({ message: "Only team leaders can post announcements" });
     }
     try {
       const id = parseInt(req.params.id);

@@ -37,7 +37,7 @@ export function authenticateToken(req: AuthRequest, res: Response, next: NextFun
   //  Extract just the token part (remove "Bearer " prefix)
   const token = authHeader && authHeader.split(" ")[1];
 
-  // Step 3: If no token provided, reject with 401 Unauthorized
+  //  If no token provided, reject with 401 Unauthorized
   if (!token) {
     return res.status(401).json({ message: "Access token required" });
   }
@@ -51,11 +51,11 @@ export function authenticateToken(req: AuthRequest, res: Response, next: NextFun
       role: string;
     };
 
-    // Step 5: Attach the decoded user data to the request object
+    //  Attach the decoded user data to the request object
     // Now all route handlers can access req.user to know who is logged in
     req.user = decoded;
 
-    // Step 6: Continue to the next middleware/route handler
+    // Continue to the next middleware/route handler
     next();
   } catch (error) {
     // If token verification failed, return 403 Forbidden
