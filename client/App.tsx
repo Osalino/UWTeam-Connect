@@ -13,7 +13,6 @@ import { Layout } from "./components/Layout";
 import Index from "./pages/Index";
 import Schedule from "./pages/Schedule";
 import TeamMemeber from "./pages/Team Memeber";
-import Reporting from "./pages/Reporting";
 import SettingsPage from "./pages/library";
 import Announcements from "./pages/Announcements";
 import Login from "./pages/Login";
@@ -72,14 +71,7 @@ const AppRoutes = () => (
         </ProtectedRoute>
       }
     />
-    <Route
-      path="/reporting"
-      element={
-        <ProtectedRoute>
-          <Reporting />
-        </ProtectedRoute>
-      }
-    />
+
     <Route
       path="/library"
       element={
